@@ -14,14 +14,30 @@ public class HIVDiagnostics {
      */
 
     public static CommandLine parseOptions(String[] args) {
-        for(String arg : args){
-            if(arg.equals("-m") || arg.equals("--mutationfiles")){
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter helpFormatter = new HelpFormatter();
 
-            }
+        Options options = new Options();
+        Option mutationfiles = Option.builder("m").longOpt("mutationfiles").hasArg().required(true).desc("Pfad zu CSV-Datei mit Mutationspattern. Muss angegeben werden.").build();
+        options.addOption(mutationfiles);
+        Option drugnames = Option.builder("d").longOpt("drugnames").hasArg().required(true).desc("Name des Medikaments. Muss angegeben werden.").build();
+        options.addOption(drugnames);
+        Option references = Option.builder("r").longOpt("references").hasArg().required(true).desc("Pfad zu FASTA-Datei mit der Referenzsequenz. Muss angegeben werden.").build();
+        options.addOption(references);
+        Option patientseqs = Option.builder("p").longOpt("patientseqs").hasArg().required(true).desc("Pfad zu FASTA-Datei mit Patientensequenzen. Muss angegeben werden.").build();
+        options.addOption(patientseqs);
+
+        try {
+            return parser.parse(options, args);
+        } catch (ParseException e) {
+            helpFormatter.printHelp("HIVDiagnostics", options);
+            return null;
         }
-        return null;
     }
 
+
+
     public static void main(String[] args) {
+
     }
 }
