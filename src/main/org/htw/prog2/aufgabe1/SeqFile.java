@@ -1,14 +1,39 @@
 package org.htw.prog2.aufgabe1;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class SeqFile {
+
+    private LinkedHashSet<String> linkedSequences = new LinkedHashSet<>();
+    private boolean isValid;
+
     /**
      * Reads the specified FASTA file and stores sequences. In case the file does not exist or is not a valid FASTA
      * file, the Constructor does not throw an Exception. Instead, isValid() on the resulting object will return false.
      * @param filename
      */
     public SeqFile(String filename) {
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line;
+
+            while (br.ready()){
+                line = br.readLine();
+
+                if(line.startsWith(">")){
+                    continue;
+                }
+                linkedSequences.add(line);
+                isValid = true;
+            }
+        }
+        catch(Exception e){
+            isValid = false;
+        }
     }
     
     /**
@@ -35,15 +60,29 @@ public class SeqFile {
      * @return The number of sequences read from the FASTA file, or 0 if isValid() is false.
      */
     public int getNumberOfSequences() {
-        return 0;
-    }
+        if(isValid) {
+            return linkedSequences.size();
+        }
+        else{
+            return 0;
+        }
+        }
+
 
     /**
      *
      * @return The sequences read from the FASTA file, or an empty HashSet if isValid() is false.
      */
     public HashSet<String> getSequences() {
-        return null;
+        if(isValid){
+            HashSet<String> sequences = new LinkedHashSet<>(linkedSequences);
+            return sequences;
+        }
+        else{
+            HashSet<String> empty = new HashSet<>();
+            return empty;
+        }
+
     }
 
     /**
@@ -51,7 +90,13 @@ public class SeqFile {
      * @return The first sequence read from the FASTA file, or an empty String if isValid() is false.
      */
     public String getFirstSequence() {
-        return "";
+        if(isValid){
+            String firstSequence = linkedSequences.iterator().next();
+            return firstSequence;
+        }
+        else{
+            return "";
+        }
     }
 
     /**
@@ -59,6 +104,6 @@ public class SeqFile {
      * @return true if the FASTA file was read successfully, false otherwise.
      */
     public boolean isValid() {
-        return false;
+        return isValid;
     }
 }

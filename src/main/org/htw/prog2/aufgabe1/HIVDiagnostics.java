@@ -14,6 +14,11 @@ public class HIVDiagnostics {
      */
 
     public static CommandLine parseOptions(String[] args) {
+        for(String arg : args){
+            if(arg.equals("-m") || arg.equals("--mutationfiles")){
+
+            }
+        }
         return null;
     }
 
